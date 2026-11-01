@@ -1,0 +1,143 @@
+{
+  "estudiantes": [
+    {
+      "legajo": 1001,
+      "nombre": "Lucía",
+      "apellido": "Ferreyra",
+      "email": "lucia.ferreyra@alumnos.example.edu.ar",
+      "carrera": "Tecnicatura Universitaria en Programación",
+      "deuda": false,
+      "materias": [
+        {
+          "nombre": "Programación I",
+          "nota": 8,
+          "extracurricular": false
+        },
+        {
+          "nombre": "Matemática",
+          "nota": 6,
+          "extracurricular": false
+        },
+        {
+          "nombre": "Inglés I",
+          "nota": 9,
+          "extracurricular": false
+        },
+        {
+          "nombre": "Taller de Fotografía",
+          "nota": 10,
+          "extracurricular": true
+        },
+        {
+          "nombre": "Bases de Datos I",
+          "nota": 2,
+          "extracurricular": false
+        }
+      ]
+    },
+    {
+      "legajo": 1002,
+      "nombre": "Tomás",
+      "apellido": "Benítez",
+      "email": "tomas.benitez@alumnos.example.edu.ar",
+      "carrera": "Tecnicatura Universitaria en Programación",
+      "deuda": true,
+      "materias": [
+        {
+          "nombre": "Programación I",
+          "nota": 7,
+          "extracurricular": false
+        }
+      ]
+    },
+    {
+      "legajo": 1003,
+      "nombre": "Valentina",
+      "apellido": "Ríos",
+      "email": "valentina.rios@alumnos.example.edu.ar",
+      "carrera": "Tecnicatura Universitaria en Programación",
+      "deuda": false,
+      "materias": [
+        {
+          "nombre": "Programación I",
+          "nota": 7,
+          "extracurricular": false
+        },
+        {
+          "nombre": "Arquitectura y Sistemas Operativos",
+          "nota": 5,
+          "extracurricular": false
+        }
+      ]
+    },
+    {
+      "legajo": 1004,
+      "nombre": "Joaquín",
+      "apellido": "Paz",
+      "email": "joaquin.paz@alumnos.example.edu.ar",
+      "carrera": "Tecnicatura Universitaria en Programación",
+      "deuda": false,
+      "materias": [
+        {
+          "nombre": "Matemática",
+          "nota": 3,
+          "extracurricular": false
+        },
+        {
+          "nombre": "Coro Universitario",
+          "nota": 9,
+          "extracurricular": true
+        }
+      ]
+    }
+  ],
+  "responsables": [
+    {
+      "nombre": "Graciela Molina",
+      "area": "Departamento de Alumnos"
+    },
+    {
+      "nombre": "Martín Quiroga",
+      "area": "Departamento de Alumnos"
+    },
+    {
+      "nombre": "Silvia Ortega",
+      "area": "Tesorería"
+    }
+  ],
+  "solicitudes": [
+    {
+      "id": 1,
+      "legajo": 1001,
+      "tipo": "alumno_regular",
+      "prioridad": "media",
+      "estado": "pendiente",
+      "area": "Departamento de Alumnos",
+      "responsable": null,
+      "motivo": "Presentar en el trabajo",
+      "fecha": "2026-10-20"
+    },
+    {
+      "id": 2,
+      "legajo": 1003,
+      "tipo": "analitico_parcial",
+      "prioridad": "alta",
+      "estado": "en_proceso",
+      "area": "Departamento de Alumnos",
+      "responsable": "Martín Quiroga",
+      "motivo": "Beca de estudio",
+      "fecha": "2026-10-22"
+    },
+    {
+      "id": 3,
+      "legajo": 1002,
+      "tipo": "alumno_regular",
+      "prioridad": "baja",
+      "estado": "rechazada",
+      "area": "Tesorería",
+      "responsable": null,
+      "motivo": "Trámite de obra social",
+      "fecha": "2026-10-25"
+    }
+  ]
+}
