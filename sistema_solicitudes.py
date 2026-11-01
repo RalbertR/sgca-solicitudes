@@ -14,6 +14,7 @@ class SistemaSolicitudes:
             print("=== SGCA - Solicitudes de certificados ===")
             print("1. Registrar solicitud")
             print("2. Cambiar estado")
+            print("3. Asignar responsable")
             print("0. Salir")
             op = input("Opción: ")
             if op == "1":
@@ -31,6 +32,16 @@ class SistemaSolicitudes:
                     print("Solicitud " + str(r["id"]) + " registrada. Estado: pendiente. Área: Departamento de Alumnos.")
             elif op == "2":
                 self.procesar()
+            elif op == "3":
+                id_txt = input("ID de solicitud: ").strip()
+                nombre = input("Responsable: ").strip()
+                try:
+                    id = int(id_txt)
+                except ValueError:
+                    print("ERROR: el ID debe ser numérico")
+                    continue
+                r = self.asignar_responsable(id, nombre)
+                print(r)
             elif op == "0":
                 print("Hasta luego.")
                 break
@@ -167,3 +178,28 @@ class SistemaSolicitudes:
                 nombre_tipo = "analítico parcial"
             print("Correo enviado a " + est["email"] + ": su certificado de " + nombre_tipo + " está disponible.")
         return ""
+
+    def asignar_responsable(self, id, nombre):
+        f = open(self.archivo, encoding="utf-8")
+        d = json.load(f)
+        f.close()
+        s = None
+        for x in d["solicitudes"]:
+            if x["id"] == id:
+                s = x
+        if s is None:
+            return "ERROR: no existe la solicitud " + str(id)
+        resp = None
+        for x in d["responsables"]:
+            if x["nombre"] == nombre:
+                resp = x
+        if resp is None:
+            return "ERROR: no existe el responsable " + nombre
+        if resp["area"] != s["area"]:
+            return "ERROR: " + nombre + " no pertenece al área " + s["area"]
+        s["responsable"] = nombre
+        f = open(self.archivo, "w", encoding="utf-8")
+        json.dump(d, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+        f.close()
+        return "Solicitud " + str(id) + " asignada a " + nombre + " (" + resp["area"] + ")."
