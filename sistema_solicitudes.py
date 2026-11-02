@@ -15,6 +15,7 @@ class SistemaSolicitudes:
             print("1. Registrar solicitud")
             print("2. Cambiar estado")
             print("3. Asignar responsable")
+            print("4. Buscar solicitudes")
             print("0. Salir")
             op = input("Opción: ")
             if op == "1":
@@ -42,6 +43,12 @@ class SistemaSolicitudes:
                     continue
                 r = self.asignar_responsable(id, nombre)
                 print(r)
+            elif op == "4":
+                estado = input("Estado (vacío = todos): ").strip().lower()
+                tipo = input("Tipo (vacío = todos): ").strip().lower()
+                prioridad = input("Prioridad (vacío = todas): ").strip().lower()
+                legajo = input("Legajo (vacío = todos): ").strip()
+                self.filtrar_solicitudes(estado, tipo, prioridad, legajo)
             elif op == "0":
                 print("Hasta luego.")
                 break
@@ -203,3 +210,34 @@ class SistemaSolicitudes:
         f.write("\n")
         f.close()
         return "Solicitud " + str(id) + " asignada a " + nombre + " (" + resp["area"] + ")."
+
+    def filtrar_solicitudes(self, estado, tipo, prioridad, legajo):
+        f = open(self.archivo, encoding="utf-8")
+        d = json.load(f)
+        f.close()
+        res = []
+        for s in d["solicitudes"]:
+            if estado != "" and s["estado"] != estado:
+                continue
+            if tipo != "" and s["tipo"] != tipo:
+                continue
+            if prioridad != "" and s["prioridad"] != prioridad:
+                continue
+            if legajo != "" and str(s["legajo"]) != legajo:
+                continue
+            res.append(s)
+        if len(res) == 0:
+            print("No se encontraron solicitudes.")
+            return
+        res.sort(key=lambda x: x["id"])
+        for s in res:
+            est = None
+            for e in d["estudiantes"]:
+                if e["legajo"] == s["legajo"]:
+                    est = e
+            resp = s["responsable"]
+            if resp is None:
+                resp = "-"
+            print("#" + str(s["id"]) + " | " + str(s["legajo"]) + " " + est["apellido"] + ", " + est["nombre"]
+                  + " | " + s["tipo"] + " | " + s["prioridad"] + " | " + s["estado"] + " | " + resp)
+        print("Total: " + str(len(res)))
