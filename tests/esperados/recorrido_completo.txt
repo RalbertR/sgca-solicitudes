@@ -1,0 +1,125 @@
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: Legajo: Tipo (alumno_regular/analitico_parcial): Prioridad (baja/media/alta): Motivo: Solicitud 4 registrada. Estado: pendiente. Área: Departamento de Alumnos.
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: Legajo: Tipo (alumno_regular/analitico_parcial): Prioridad (baja/media/alta): Motivo: Solicitud 5 registrada. Estado: rechazada. Área: Tesorería. Motivo: el estudiante tiene deuda administrativa.
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: Legajo: Tipo (alumno_regular/analitico_parcial): Prioridad (baja/media/alta): Motivo: ERROR: el legajo debe ser numérico
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: ID de solicitud: Responsable: Solicitud 4 asignada a Graciela Molina (Departamento de Alumnos).
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: ID de solicitud: Responsable: ERROR: Silvia Ortega no pertenece al área Departamento de Alumnos
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: ID de solicitud: Nuevo estado (pendiente/en_proceso/emitida/rechazada): Solicitud 4: pendiente -> en_proceso.
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: ID de solicitud: Nuevo estado (pendiente/en_proceso/emitida/rechazada): Solicitud 4: en_proceso -> emitida.
+Certificado generado: certificados/certificado_4.txt
+Correo enviado a lucia.ferreyra@alumnos.example.edu.ar: su certificado de analítico parcial está disponible.
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: ID de solicitud: Nuevo estado (pendiente/en_proceso/emitida/rechazada): ERROR: no se puede pasar de rechazada a en_proceso
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: ID de solicitud: Nuevo estado (pendiente/en_proceso/emitida/rechazada): ERROR: el ID debe ser numérico
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: Estado (vacío = todos): Tipo (vacío = todos): Prioridad (vacío = todas): Legajo (vacío = todos): #1 | 1001 Ferreyra, Lucía | alumno_regular | media | pendiente | -
+#4 | 1001 Ferreyra, Lucía | analitico_parcial | alta | emitida | Graciela Molina
+Total: 2
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: Reporte de solicitudes
+Total: 5
+Por estado: pendiente=1, en_proceso=1, emitida=1, rechazada=2
+Por tipo: alumno_regular=3, analitico_parcial=2
+Por prioridad: baja=1, media=2, alta=2
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: Opción inválida.
+
+=== SGCA - Solicitudes de certificados ===
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar solicitudes
+5. Reporte
+0. Salir
+Opción: Hasta luego.
