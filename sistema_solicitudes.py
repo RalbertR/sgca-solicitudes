@@ -16,6 +16,7 @@ class SistemaSolicitudes:
             print("2. Cambiar estado")
             print("3. Asignar responsable")
             print("4. Buscar solicitudes")
+            print("5. Reporte")
             print("0. Salir")
             op = input("Opción: ")
             if op == "1":
@@ -49,6 +50,8 @@ class SistemaSolicitudes:
                 prioridad = input("Prioridad (vacío = todas): ").strip().lower()
                 legajo = input("Legajo (vacío = todos): ").strip()
                 self.filtrar_solicitudes(estado, tipo, prioridad, legajo)
+            elif op == "5":
+                self.reporte()
             elif op == "0":
                 print("Hasta luego.")
                 break
@@ -241,3 +244,42 @@ class SistemaSolicitudes:
             print("#" + str(s["id"]) + " | " + str(s["legajo"]) + " " + est["apellido"] + ", " + est["nombre"]
                   + " | " + s["tipo"] + " | " + s["prioridad"] + " | " + s["estado"] + " | " + resp)
         print("Total: " + str(len(res)))
+
+    def reporte(self):
+        f = open(self.archivo, encoding="utf-8")
+        d = json.load(f)
+        f.close()
+        pend = 0
+        proc = 0
+        emi = 0
+        rech = 0
+        reg = 0
+        ana = 0
+        baja = 0
+        media = 0
+        alta = 0
+        for s in d["solicitudes"]:
+            if s["estado"] == "pendiente":
+                pend += 1
+            elif s["estado"] == "en_proceso":
+                proc += 1
+            elif s["estado"] == "emitida":
+                emi += 1
+            elif s["estado"] == "rechazada":
+                rech += 1
+            if s["tipo"] == "alumno_regular":
+                reg += 1
+            elif s["tipo"] == "analitico_parcial":
+                ana += 1
+            if s["prioridad"] == "baja":
+                baja += 1
+            elif s["prioridad"] == "media":
+                media += 1
+            elif s["prioridad"] == "alta":
+                alta += 1
+        print("Reporte de solicitudes")
+        print("Total: " + str(len(d["solicitudes"])))
+        print("Por estado: pendiente=" + str(pend) + ", en_proceso=" + str(proc) + ", emitida=" + str(emi)
+              + ", rechazada=" + str(rech))
+        print("Por tipo: alumno_regular=" + str(reg) + ", analitico_parcial=" + str(ana))
+        print("Por prioridad: baja=" + str(baja) + ", media=" + str(media) + ", alta=" + str(alta))
