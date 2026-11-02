@@ -10,4 +10,12 @@ Hace falta Python 3.12 o superior. El sistema no usa librerías externas.
 python main.py
 ```
 
-Los datos de ejemplo están en `datos.json` y son todos inventados.
+Los datos de ejemplo están en `datos.json` y son todos inventados. Los certificados emitidos se guardan en la carpeta `certificados/`.
+
+## Funcionalidades
+
+1. Registrar una solicitud. Si el estudiante tiene deuda queda rechazada y pasa a Tesorería.
+2. Cambiar el estado de una solicitud. Al emitirla se genera el certificado y se avisa por correo.
+3. Asignar un responsable del área que corresponde.
+4. Buscar solicitudes por estado, tipo, prioridad y legajo.
+5. Ver un reporte con la cantidad de solicitudes por estado, tipo y prioridad.
