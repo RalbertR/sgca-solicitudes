@@ -1,0 +1,34 @@
+$ pytest -v
+============================= test session starts =============================
+sgca-solicitudes\.venv\Scripts\python.exe
+sgca-solicitudes
+configfile: pyproject.toml
+testpaths: tests
+collecting ... collected 24 items
+
+tests/test_caracterizacion.py::test_registra_solicitud_sin_deuda PASSED  [  4%]
+tests/test_caracterizacion.py::test_registra_con_deuda_queda_rechazada_en_tesoreria PASSED [  8%]
+tests/test_caracterizacion.py::test_registro_legajo_inexistente PASSED   [ 12%]
+tests/test_caracterizacion.py::test_registro_legajo_no_numerico PASSED   [ 16%]
+tests/test_caracterizacion.py::test_registro_tipo_y_prioridad_invalidos PASSED [ 20%]
+tests/test_caracterizacion.py::test_registro_normaliza_tipo_y_prioridad PASSED [ 25%]
+tests/test_caracterizacion.py::test_asigna_responsable PASSED            [ 29%]
+tests/test_caracterizacion.py::test_asigna_responsable_de_otra_area PASSED [ 33%]
+tests/test_caracterizacion.py::test_asigna_responsable_inexistente PASSED [ 37%]
+tests/test_caracterizacion.py::test_cambia_estado PASSED                 [ 41%]
+tests/test_caracterizacion.py::test_transicion_invalida PASSED           [ 45%]
+tests/test_caracterizacion.py::test_estado_final_no_cambia PASSED        [ 50%]
+tests/test_caracterizacion.py::test_estado_invalido PASSED               [ 54%]
+tests/test_caracterizacion.py::test_emitir_sin_responsable PASSED        [ 58%]
+tests/test_caracterizacion.py::test_id_inexistente_y_no_numerico PASSED  [ 62%]
+tests/test_caracterizacion.py::test_emite_alumno_regular PASSED          [ 66%]
+tests/test_caracterizacion.py::test_emite_analitico_excluye_extracurriculares_y_desaprobadas PASSED [ 70%]
+tests/test_caracterizacion.py::test_emite_analitico_sin_aprobadas PASSED [ 75%]
+tests/test_caracterizacion.py::test_busca_por_estado_y_tipo PASSED       [ 79%]
+tests/test_caracterizacion.py::test_busca_por_legajo PASSED              [ 83%]
+tests/test_caracterizacion.py::test_busca_sin_resultados PASSED          [ 87%]
+tests/test_caracterizacion.py::test_reporte PASSED                       [ 91%]
+tests/test_caracterizacion.py::test_opcion_invalida PASSED               [ 95%]
+tests/test_caracterizacion.py::test_recorrido_completo PASSED            [100%]
+
+============================= 24 passed in 2.24s ==============================

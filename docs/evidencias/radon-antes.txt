@@ -1,0 +1,17 @@
+$ radon cc -s -a sistema_solicitudes.py
+sistema_solicitudes.py
+    M 119:4 SistemaSolicitudes.cambiar_estado - D (24)
+    M 217:4 SistemaSolicitudes.filtrar_solicitudes - C (15)
+    M 61:4 SistemaSolicitudes.registrar_solicitud - C (13)
+    C 6:0 SistemaSolicitudes - C (12)
+    M 11:4 SistemaSolicitudes.menu - C (12)
+    M 248:4 SistemaSolicitudes.reporte - C (11)
+    M 192:4 SistemaSolicitudes.asignar_responsable - B (8)
+    M 107:4 SistemaSolicitudes.procesar - A (3)
+    M 8:4 SistemaSolicitudes.__init__ - A (1)
+
+9 blocks (classes, functions, methods) analyzed.
+Average complexity: C (11.0)
+
+$ radon mi -s sistema_solicitudes.py
+sistema_solicitudes.py - B (9.45)
