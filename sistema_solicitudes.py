@@ -2,6 +2,17 @@ import json
 import os
 from datetime import datetime
 
+from sgca.modelos import (
+    AREA_ALUMNOS,
+    AREA_TESORERIA,
+    NOTA_MAXIMA,
+    NOTA_MINIMA_APROBACION,
+    EstadoSolicitud,
+    Prioridad,
+    TipoCertificado,
+    puede_pasar,
+)
+
 
 class SistemaSolicitudes:
 
@@ -27,12 +38,12 @@ class SistemaSolicitudes:
                 resultado = self.registrar_solicitud(legajo, tipo, prioridad, motivo)
                 if isinstance(resultado, str) and resultado.startswith("ERROR"):
                     print(resultado)
-                elif resultado["estado"] == "rechazada":
-                    print("Solicitud " + str(resultado["id"]) + " registrada. Estado: rechazada. Área: Tesorería. "
-                          "Motivo: el estudiante tiene deuda administrativa.")
+                elif resultado["estado"] == EstadoSolicitud.RECHAZADA:
+                    print("Solicitud " + str(resultado["id"]) + " registrada. Estado: " + EstadoSolicitud.RECHAZADA
+                          + ". Área: " + AREA_TESORERIA + ". Motivo: el estudiante tiene deuda administrativa.")
                 else:
-                    print("Solicitud " + str(resultado["id"])
-                          + " registrada. Estado: pendiente. Área: Departamento de Alumnos.")
+                    print("Solicitud " + str(resultado["id"]) + " registrada. Estado: " + EstadoSolicitud.PENDIENTE
+                          + ". Área: " + AREA_ALUMNOS + ".")
             elif opcion == "2":
                 self.pedir_cambio_de_estado()
             elif opcion == "3":
@@ -104,16 +115,16 @@ class SistemaSolicitudes:
         return None
 
     def _validar_tipo_y_prioridad(self, tipo, prioridad):
-        if tipo != "alumno_regular" and tipo != "analitico_parcial":
+        if tipo not in list(TipoCertificado):
             return "ERROR: tipo de certificado inválido: " + tipo
-        if prioridad != "baja" and prioridad != "media" and prioridad != "alta":
+        if prioridad not in list(Prioridad):
             return "ERROR: prioridad inválida: " + prioridad
         return None
 
     def _estado_y_area_inicial(self, estudiante):
         if estudiante["deuda"]:
-            return "rechazada", "Tesorería"
-        return "pendiente", "Departamento de Alumnos"
+            return EstadoSolicitud.RECHAZADA, AREA_TESORERIA
+        return EstadoSolicitud.PENDIENTE, AREA_ALUMNOS
 
     def _proximo_id(self, datos):
         ultimo_id = 0
@@ -151,23 +162,17 @@ class SistemaSolicitudes:
         f.write("\n")
         f.close()
         print("Solicitud " + str(id_solicitud) + ": " + anterior + " -> " + nuevo_estado + ".")
-        if nuevo_estado == "emitida":
+        if nuevo_estado == EstadoSolicitud.EMITIDA:
             self._emitir(datos, solicitud)
         return ""
 
     def _validar_transicion(self, solicitud, nuevo_estado):
         actual = solicitud["estado"]
-        if nuevo_estado not in ["pendiente", "en_proceso", "emitida", "rechazada"]:
+        if nuevo_estado not in list(EstadoSolicitud):
             return "ERROR: estado inválido: " + nuevo_estado
-        if actual == "pendiente":
-            permitidos = ["en_proceso", "rechazada"]
-        elif actual == "en_proceso":
-            permitidos = ["emitida", "rechazada"]
-        else:
-            permitidos = []
-        if nuevo_estado not in permitidos:
+        if not puede_pasar(EstadoSolicitud(actual), EstadoSolicitud(nuevo_estado)):
             return "ERROR: no se puede pasar de " + actual + " a " + nuevo_estado
-        if nuevo_estado == "emitida" and solicitud["responsable"] is None:
+        if nuevo_estado == EstadoSolicitud.EMITIDA and solicitud["responsable"] is None:
             return "ERROR: la solicitud " + str(solicitud["id"]) + " no tiene responsable asignado"
         return None
 
@@ -181,12 +186,12 @@ class SistemaSolicitudes:
 
     def _generar_texto_certificado(self, solicitud, estudiante, fecha):
         texto = "SGCA - Sistema de Gestión de Certificados Académicos\n"
-        if solicitud["tipo"] == "alumno_regular":
+        if solicitud["tipo"] == TipoCertificado.ALUMNO_REGULAR:
             texto += "CERTIFICADO DE ALUMNO REGULAR\n\n"
             texto += ("Se certifica que " + estudiante["nombre"] + " " + estudiante["apellido"] + ", legajo "
                       + str(estudiante["legajo"]) + ", es alumno/a regular de la carrera "
                       + estudiante["carrera"] + ".\n\n")
-        elif solicitud["tipo"] == "analitico_parcial":
+        elif solicitud["tipo"] == TipoCertificado.ANALITICO_PARCIAL:
             texto += "CERTIFICADO ANALÍTICO PARCIAL\n\n"
             texto += ("Estudiante: " + estudiante["nombre"] + " " + estudiante["apellido"] + " - Legajo "
                       + str(estudiante["legajo"]) + "\n")
@@ -207,7 +212,8 @@ class SistemaSolicitudes:
     def _materias_aprobadas(self, materias):
         aprobadas = []
         for materia in materias:
-            if materia["nota"] >= 4 and materia["nota"] <= 10 and not materia["extracurricular"]:
+            nota_valida = NOTA_MINIMA_APROBACION <= materia["nota"] <= NOTA_MAXIMA
+            if nota_valida and not materia["extracurricular"]:
                 aprobadas.append(materia)
         return aprobadas
 
@@ -226,11 +232,8 @@ class SistemaSolicitudes:
         return ruta
 
     def _avisar_por_correo(self, estudiante, tipo):
-        if tipo == "alumno_regular":
-            nombre_tipo = "alumno regular"
-        else:
-            nombre_tipo = "analítico parcial"
-        print("Correo enviado a " + estudiante["email"] + ": su certificado de " + nombre_tipo + " está disponible.")
+        descripcion = TipoCertificado(tipo).descripcion
+        print("Correo enviado a " + estudiante["email"] + ": su certificado de " + descripcion + " está disponible.")
 
     def asignar_responsable(self, id_solicitud, nombre):
         f = open(self.archivo, encoding="utf-8")
@@ -287,37 +290,18 @@ class SistemaSolicitudes:
         f = open(self.archivo, encoding="utf-8")
         datos = json.load(f)
         f.close()
-        pendientes = 0
-        en_proceso = 0
-        emitidas = 0
-        rechazadas = 0
-        alumno_regular = 0
-        analitico_parcial = 0
-        baja = 0
-        media = 0
-        alta = 0
+        por_estado = {estado.value: 0 for estado in EstadoSolicitud}
+        por_tipo = {tipo.value: 0 for tipo in TipoCertificado}
+        por_prioridad = {prioridad.value: 0 for prioridad in Prioridad}
         for solicitud in datos["solicitudes"]:
-            if solicitud["estado"] == "pendiente":
-                pendientes += 1
-            elif solicitud["estado"] == "en_proceso":
-                en_proceso += 1
-            elif solicitud["estado"] == "emitida":
-                emitidas += 1
-            elif solicitud["estado"] == "rechazada":
-                rechazadas += 1
-            if solicitud["tipo"] == "alumno_regular":
-                alumno_regular += 1
-            elif solicitud["tipo"] == "analitico_parcial":
-                analitico_parcial += 1
-            if solicitud["prioridad"] == "baja":
-                baja += 1
-            elif solicitud["prioridad"] == "media":
-                media += 1
-            elif solicitud["prioridad"] == "alta":
-                alta += 1
+            por_estado[solicitud["estado"]] += 1
+            por_tipo[solicitud["tipo"]] += 1
+            por_prioridad[solicitud["prioridad"]] += 1
         print("Reporte de solicitudes")
         print("Total: " + str(len(datos["solicitudes"])))
-        print("Por estado: pendiente=" + str(pendientes) + ", en_proceso=" + str(en_proceso) + ", emitida="
-              + str(emitidas) + ", rechazada=" + str(rechazadas))
-        print("Por tipo: alumno_regular=" + str(alumno_regular) + ", analitico_parcial=" + str(analitico_parcial))
-        print("Por prioridad: baja=" + str(baja) + ", media=" + str(media) + ", alta=" + str(alta))
+        print("Por estado: " + self._formatear_conteo(por_estado))
+        print("Por tipo: " + self._formatear_conteo(por_tipo))
+        print("Por prioridad: " + self._formatear_conteo(por_prioridad))
+
+    def _formatear_conteo(self, conteo):
+        return ", ".join(clave + "=" + str(cantidad) for clave, cantidad in conteo.items())
