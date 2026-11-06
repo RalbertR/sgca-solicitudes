@@ -12,7 +12,7 @@ Lo usamos en cada Pull Request. Quien revisa marca cada ítem con sí o no, y ca
 ## Clean Code
 
 - [ ] Los nombres de variables, métodos y clases dicen qué guardan o qué hacen, sin abreviaturas como `d`, `s` o `aux`.
-- [ ] Ningún método nuevo o modificado pasa de 20 líneas, y cada uno trabaja en un solo nivel de abstracción.
+- [ ] Ningún método nuevo pasa de 20 líneas ni mezcla niveles de abstracción, y ninguno de los que ya pasaban de 20 crece.
 - [ ] No hay strings ni números sueltos repetidos que representen un concepto del dominio.
 - [ ] Los errores se informan con excepciones y no con valores especiales de retorno.
 - [ ] No queda código duplicado que se pueda unificar.
