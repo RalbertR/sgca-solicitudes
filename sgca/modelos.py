@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 AREA_ALUMNOS = "Departamento de Alumnos"
-AREA_TESORERIA = "Tesoreria"
+AREA_TESORERIA = "Tesorería"
 NOTA_MINIMA_APROBACION = 4
 NOTA_MAXIMA = 10
 
@@ -21,7 +21,7 @@ class TipoCertificado(StrEnum):
     def descripcion(self):
         if self is TipoCertificado.ALUMNO_REGULAR:
             return "alumno regular"
-        return "analitico parcial"
+        return "analítico parcial"
 
 
 class Prioridad(StrEnum):
