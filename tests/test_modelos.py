@@ -5,6 +5,7 @@ def test_transiciones_permitidas():
     assert puede_pasar(EstadoSolicitud.PENDIENTE, EstadoSolicitud.EN_PROCESO)
     assert puede_pasar(EstadoSolicitud.PENDIENTE, EstadoSolicitud.RECHAZADA)
     assert puede_pasar(EstadoSolicitud.EN_PROCESO, EstadoSolicitud.EMITIDA)
+    assert puede_pasar(EstadoSolicitud.EN_PROCESO, EstadoSolicitud.RECHAZADA)
     assert not puede_pasar(EstadoSolicitud.PENDIENTE, EstadoSolicitud.EMITIDA)
     assert not puede_pasar(EstadoSolicitud.PENDIENTE, EstadoSolicitud.PENDIENTE)
 
