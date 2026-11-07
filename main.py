@@ -1,8 +1,9 @@
 from datetime import date
 from pathlib import Path
 
+from sgca.cli import main
 from sgca.repositorio import RepositorioJson
-from sistema_solicitudes import SistemaSolicitudes
+from sgca.servicio import ServicioSolicitudes
 
 if __name__ == "__main__":
-    SistemaSolicitudes(RepositorioJson(Path("datos.json")), date.today, Path("certificados")).menu()
+    main(ServicioSolicitudes(RepositorioJson(Path("datos.json")), date.today, Path("certificados")))
