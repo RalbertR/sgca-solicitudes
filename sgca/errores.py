@@ -1,0 +1,2 @@
+class ErrorSolicitud(Exception):
+    pass

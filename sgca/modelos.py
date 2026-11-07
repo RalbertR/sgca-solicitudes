@@ -90,3 +90,28 @@ class Solicitud:
     responsable: str | None
     motivo: str
     fecha: str
+
+
+@dataclass(frozen=True)
+class NuevaSolicitud:
+    legajo: int
+    tipo: str
+    prioridad: str
+    motivo: str
+
+
+@dataclass(frozen=True)
+class FiltroSolicitudes:
+    estado: str = ""
+    tipo: str = ""
+    prioridad: str = ""
+    legajo: str = ""
+
+    def coincide(self, solicitud):
+        criterios = [
+            (self.estado, solicitud.estado),
+            (self.tipo, solicitud.tipo),
+            (self.prioridad, solicitud.prioridad),
+            (self.legajo, str(solicitud.legajo)),
+        ]
+        return all(buscado == "" or buscado == valor for buscado, valor in criterios)
