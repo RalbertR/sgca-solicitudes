@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from sgca.certificados import generar_certificado
 from sgca.errores import ErrorSolicitud
 from sgca.modelos import (
     AREA_ALUMNOS,
@@ -118,32 +119,11 @@ class ServicioSolicitudes:
             raise ErrorSolicitud(f"la solicitud {solicitud.id} no tiene responsable asignado")
 
     def _emitir_certificado(self, solicitud, estudiante):
-        texto = self._generar_texto_certificado(solicitud, estudiante, self.reloj().isoformat())
+        texto = generar_certificado(solicitud, estudiante, self.reloj().isoformat())
         self.directorio_certificados.mkdir(parents=True, exist_ok=True)
         ruta = self.directorio_certificados / f"certificado_{solicitud.id}.txt"
         ruta.write_text(texto, encoding="utf-8")
         return ruta.as_posix()
-
-    def _generar_texto_certificado(self, solicitud, estudiante, fecha):
-        texto = "SGCA - Sistema de Gestión de Certificados Académicos\n"
-        if solicitud.tipo == TipoCertificado.ALUMNO_REGULAR:
-            texto += "CERTIFICADO DE ALUMNO REGULAR\n\n"
-            texto += (f"Se certifica que {estudiante.nombre} {estudiante.apellido}, legajo {estudiante.legajo}, "
-                      f"es alumno/a regular de la carrera {estudiante.carrera}.\n\n")
-        elif solicitud.tipo == TipoCertificado.ANALITICO_PARCIAL:
-            texto += "CERTIFICADO ANALÍTICO PARCIAL\n\n"
-            texto += f"Estudiante: {estudiante.nombre} {estudiante.apellido} - Legajo {estudiante.legajo}\n"
-            texto += f"Carrera: {estudiante.carrera}\n"
-            texto += self._bloque_de_materias(estudiante)
-        texto += f"Solicitud N° {solicitud.id} - Fecha de emisión: {fecha}\n"
-        return texto
-
-    def _bloque_de_materias(self, estudiante):
-        aprobadas = estudiante.materias_aprobadas()
-        if not aprobadas:
-            return "Materias aprobadas: ninguna\nPromedio: -\n\n"
-        lineas = "".join(f"- {materia.nombre}: {materia.nota}\n" for materia in aprobadas)
-        return f"Materias aprobadas:\n{lineas}Promedio: {estudiante.promedio_analitico():.2f}\n\n"
 
 
 def _contar(solicitudes, valores_posibles, valor_de):
