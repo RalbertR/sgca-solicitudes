@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import StrEnum
 
 AREA_ALUMNOS = "Departamento de Alumnos"
@@ -40,3 +41,52 @@ TRANSICIONES = {
 
 def puede_pasar(actual, nuevo):
     return nuevo in TRANSICIONES[actual]
+
+
+@dataclass
+class Materia:
+    nombre: str
+    nota: int
+    extracurricular: bool
+
+    def esta_aprobada(self):
+        return not self.extracurricular and NOTA_MINIMA_APROBACION <= self.nota <= NOTA_MAXIMA
+
+
+@dataclass
+class Estudiante:
+    legajo: int
+    nombre: str
+    apellido: str
+    email: str
+    carrera: str
+    deuda: bool
+    materias: list[Materia]
+
+    def materias_aprobadas(self):
+        return [materia for materia in self.materias if materia.esta_aprobada()]
+
+    def promedio_analitico(self):
+        aprobadas = self.materias_aprobadas()
+        if not aprobadas:
+            return None
+        return sum(materia.nota for materia in aprobadas) / len(aprobadas)
+
+
+@dataclass
+class Responsable:
+    nombre: str
+    area: str
+
+
+@dataclass
+class Solicitud:
+    id: int
+    legajo: int
+    tipo: TipoCertificado
+    prioridad: Prioridad
+    estado: EstadoSolicitud
+    area: str
+    responsable: str | None
+    motivo: str
+    fecha: str
