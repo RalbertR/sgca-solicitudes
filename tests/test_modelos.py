@@ -90,6 +90,11 @@ def test_filtro_combina_estado_y_tipo():
     assert [solicitud.id for solicitud in SOLICITUDES if filtro.coincide(solicitud)] == [3]
 
 
+def test_filtro_por_prioridad():
+    filtro = FiltroSolicitudes(prioridad="alta")
+    assert [solicitud.id for solicitud in SOLICITUDES if filtro.coincide(solicitud)] == [2]
+
+
 def test_filtro_por_legajo_compara_como_texto():
     filtro = FiltroSolicitudes(legajo="1001")
     assert [solicitud.id for solicitud in SOLICITUDES if filtro.coincide(solicitud)] == [1, 3]
