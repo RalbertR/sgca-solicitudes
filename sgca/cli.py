@@ -1,10 +1,5 @@
-from datetime import date
-from pathlib import Path
-
 from sgca.errores import ErrorSolicitud
 from sgca.modelos import EstadoSolicitud, FiltroSolicitudes, NuevaSolicitud
-from sgca.repositorio import RepositorioJson
-from sgca.servicio import ServicioSolicitudes
 
 MENU = """
 === SGCA - Solicitudes de certificados ===
@@ -16,8 +11,7 @@ MENU = """
 0. Salir"""
 
 
-def main(servicio=None):
-    servicio = servicio or ServicioSolicitudes(RepositorioJson(Path("datos.json")), date.today, Path("certificados"))
+def main(servicio):
     while True:
         print(MENU)
         opcion = input("Opción: ")
