@@ -54,7 +54,7 @@ def _servicio(tmp_path):
             Estudiante(1001, "Lucía", "Ferreyra", "lucia@example.edu.ar", "TUP", False, [Materia("Programación I", 8, False)]),
             Estudiante(1002, "Tomás", "Benítez", "tomas@example.edu.ar", "TUP", True, []),
         ],
-        responsables=[Responsable("Graciela Molina", AREA_ALUMNOS)],
+        responsables=[Responsable("Graciela Molina", AREA_ALUMNOS), Responsable("Silvia Ortega", AREA_TESORERIA)],
         solicitudes=[
             Solicitud(1, 1001, TipoCertificado.ALUMNO_REGULAR, Prioridad.MEDIA, EstadoSolicitud.PENDIENTE,
                       AREA_ALUMNOS, None, "x", "2026-10-20"),
@@ -76,6 +76,18 @@ def test_registrar_con_deuda_va_a_tesoreria(tmp_path):
 def test_registrar_tipo_invalido_lanza_error(tmp_path):
     with pytest.raises(ErrorSolicitud, match="tipo de certificado inválido: titulo"):
         _servicio(tmp_path).registrar(NuevaSolicitud(1001, "titulo", "baja", "x"))
+
+
+def test_registrar_sin_deuda_queda_pendiente_en_alumnos(tmp_path):
+    solicitud = _servicio(tmp_path).registrar(NuevaSolicitud(1001, "analitico_parcial", "alta", "Beca"))
+    assert solicitud.estado == EstadoSolicitud.PENDIENTE
+    assert solicitud.area == AREA_ALUMNOS
+    assert solicitud.responsable is None
+
+
+def test_registrar_legajo_inexistente_lanza_error(tmp_path):
+    with pytest.raises(ErrorSolicitud, match="no existe un estudiante con legajo 9999"):
+        _servicio(tmp_path).registrar(NuevaSolicitud(9999, "alumno_regular", "baja", "x"))
 
 
 def test_emitir_sin_responsable_lanza_error(tmp_path):
@@ -100,6 +112,35 @@ def test_cambio_sin_emision_no_genera_certificado(tmp_path):
     cambio = _servicio(tmp_path).cambiar_estado(1, "en_proceso")
     assert cambio.ruta_certificado is None
     assert cambio.email_notificado is None
+
+
+def test_transicion_no_permitida_lanza_error(tmp_path):
+    servicio = _servicio(tmp_path)
+    with pytest.raises(ErrorSolicitud, match="no se puede pasar de pendiente a emitida"):
+        servicio.cambiar_estado(1, "emitida")
+    assert servicio.repositorio.buscar_solicitud(1).estado == EstadoSolicitud.PENDIENTE
+
+
+def test_estado_invalido_lanza_error(tmp_path):
+    with pytest.raises(ErrorSolicitud, match="estado inválido: anulada"):
+        _servicio(tmp_path).cambiar_estado(1, "anulada")
+
+
+def test_asignar_responsable_del_area(tmp_path):
+    servicio = _servicio(tmp_path)
+    solicitud = servicio.asignar_responsable(1, "Graciela Molina")
+    assert solicitud.responsable == "Graciela Molina"
+    assert servicio.repositorio.buscar_solicitud(1).responsable == "Graciela Molina"
+
+
+def test_asignar_responsable_inexistente_lanza_error(tmp_path):
+    with pytest.raises(ErrorSolicitud, match="no existe el responsable Nadie"):
+        _servicio(tmp_path).asignar_responsable(1, "Nadie")
+
+
+def test_asignar_responsable_de_otra_area_lanza_error(tmp_path):
+    with pytest.raises(ErrorSolicitud, match="Silvia Ortega no pertenece al área Departamento de Alumnos"):
+        _servicio(tmp_path).asignar_responsable(1, "Silvia Ortega")
 
 
 def test_buscar_devuelve_solicitud_y_estudiante(tmp_path):
